@@ -1,45 +1,52 @@
 #include "monty.h"
-/**
- * main - interprets monty byte code
- * @argc: argument count passed by user from the terminal
- * @argv: array of commands passed by user
- * Return: tbd
- */
-int main(int argc, char **argv)
-{
-	FILE *fileptr = fopen(argv[1], "r");
-	char *line_opcode;
-	stack_t *stacknode = malloc(sizeof(stack_t));
-	stack_t **head = &stacknode;
-	char **all_lines;
-	char **line_chunks;
-	unsigned int line_idx = 0;
-	void (*function)(stack_t **, unsigned int);
 
-	if (argc <= 1)
+/**
+ * main - opens monty file and reads lines
+ * @argc: number of arguments
+ * @argv: array of arguments
+ *
+ * Return: 0 success, 1 failure
+ */
+
+int main(int argc, char *argv[])
+
+{
+	FILE *fp;
+	ssize_t bytes_read;
+	size_t len = 0;
+	char *line = NULL;
+	char *token = NULL;
+	int line_number = 0;
+	stack_t *head = NULL;
+
+	if (argc != 2)
 	{
-		perror("USAGE: monty file \n");
+		printf("USAGE: monty file\n");
 		exit(EXIT_FAILURE);
 	}
-	if (!fileptr)
+	else
 	{
-		perror("Error: Can\'t open file <>\n");
-		exit(EXIT_FAILURE);
-	}
-	all_lines = readlines(fileptr);
-	while (all_lines[line_idx])
-	{
-		line_chunks = tokenizer(all_lines[line_idx]);
-		line_opcode = get_op(line_chunks);
-		function = get_op_func(line_opcode);
-		if (!function)
+		fp = fopen(argv[1], "r");
+		if (fp == NULL)
 		{
-			perror("L<line_number>: unknown instruction <opcode>");
+			printf("Error: Can't open file %s\n", argv[1]);
 			exit(EXIT_FAILURE);
 		}
-		function(head, (line_idx + 1));
-		line_idx++;
+		else
+		{
+			while ((bytes_read = getline(&line, &len, fp)) != -1)
+			{
+				line_number++;
+				token = get_tokens(line, line_number);
+				if (token != NULL)
+					get_func(token, &head, line_number);
+
+			}
+			free(line);
+			free_stack(head);
+			fclose(fp);
+		}
 	}
-	fclose(fileptr);
+
 	return (0);
 }

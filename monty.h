@@ -1,15 +1,17 @@
-#ifndef _MONTY_H_
-#define _MONTY_H_
-#include <string.h>
-#include <stdlib.h>
+#ifndef MONTY_H
+#define MONTY_H
+
 #include <stdio.h>
-#include <unistd.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <string.h>
 
-/* fileptr points to file with byte code*/
-
-extern FILE *fileptr;
-FILE *fileptr;
-
+#define EXIT_SUCCESS 0
+#define EXIT_FAILURE 1
+extern int global_var;
+int global_var;
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
  * @n: integer
@@ -27,7 +29,7 @@ typedef struct stack_s
 } stack_t;
 
 /**
- * struct instruction_s - opcode and its function
+ * struct instruction_s - opcoode and its function
  * @opcode: the opcode
  * @f: function to handle the opcode
  *
@@ -40,18 +42,19 @@ typedef struct instruction_s
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-/* prototypes */
-char **readlines(FILE *filepointer);
-char **tokenizer(char *lines);
-char *get_op(char **tokens);
-int op_arg(char **tokens);
-void push(stack_t **stack, unsigned int line_number);
-void pall(stack_t **stack, unsigned int line_number);
-void pint(stack_t **stack, unsigned int line_number);
-void pop_int(stack_t **stack, unsigned int line_number);
-void swap_int(stack_t **stack, unsigned int line_number);
-void add_ints(stack_t **stack, unsigned int line_number);
-void nop_nop(stack_t **stack, unsigned int line_number);
-void (*get_op_func(char *line_opcode))(stack_t **, unsigned int);
+char *get_tokens(char *line, unsigned int line_number);
+void push_func(stack_t **stack, unsigned int line_number);
+void pall_func(stack_t **stack, unsigned int line_number);
+void pint_func(stack_t **stack, unsigned int line_number);
+void pop_func(stack_t **stack, unsigned int line_number);
+void nop_func(stack_t **stack, unsigned int line_number);
+void swap_func(stack_t **stack, unsigned int line_number);
+void add_func(stack_t **stack, unsigned int line_number);
+void sub_func(stack_t **stack, unsigned int line_number);
+void div_func(stack_t **stack, unsigned int line_number);
+void mul_func(stack_t **stack, unsigned int line_number);
+void get_func(char *op, stack_t **stack, unsigned int line_number);
+int is_number(char *s);
+void free_stack(stack_t *head);
 
-#endif /* _MONTY_H_ */
+#endif
