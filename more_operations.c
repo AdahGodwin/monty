@@ -5,9 +5,7 @@
  * @stack: stack
  * @line_number: line number
  */
-
 void nop_func(stack_t **stack, unsigned int line_number)
-
 {
 	(void) stack;
 	(void) line_number;
@@ -20,7 +18,6 @@ void nop_func(stack_t **stack, unsigned int line_number)
  */
 
 void swap_func(stack_t **stack, unsigned int line_number)
-
 {
 	stack_t *top = NULL;
 	stack_t *second = NULL;
@@ -39,4 +36,5 @@ void swap_func(stack_t **stack, unsigned int line_number)
 	second->next = top;
 
 	*stack = second;
+
 }

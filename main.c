@@ -1,3 +1,5 @@
+#define _GNU_SOURCE
+#include <stdio.h>
 #include "monty.h"
 
 /**
@@ -9,7 +11,6 @@
  */
 
 int main(int argc, char *argv[])
-
 {
 	FILE *fp;
 	ssize_t bytes_read;
@@ -40,13 +41,11 @@ int main(int argc, char *argv[])
 				token = get_tokens(line, line_number);
 				if (token != NULL)
 					get_func(token, &head, line_number);
-
 			}
 			free(line);
 			free_stack(head);
 			fclose(fp);
 		}
 	}
-
 	return (0);
 }
